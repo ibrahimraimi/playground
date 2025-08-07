@@ -55,7 +55,7 @@
 			class="flex cursor-pointer flex-col items-center gap-1 transition-transform hover:scale-125"
 		>
 			<div class="flex h-12 w-12 items-center justify-center">
-				<img src="/assets/camera.svg" alt="Camera" class="h-20 w-20" />
+				<img src="/assets/camera.svg" alt="Camera" class="h-30 w-30" />
 			</div>
 		</button>
 
@@ -65,8 +65,7 @@
 			class="flex cursor-pointer flex-col items-center gap-1 transition-transform hover:scale-125"
 		>
 			<div class="relative flex h-12 w-12 items-center justify-center">
-				<img src="/assets/notes.svg" alt="Note" class="h-20 w-20" />
-				<div class="absolute -top-1 -left-1 h-3 w-3 rounded-full bg-gray-400"></div>
+				<img src="/assets/notes.svg" alt="Note" class="h-30 w-30" />
 			</div>
 		</button>
 
@@ -76,7 +75,7 @@
 			class="flex cursor-pointer flex-col items-center gap-1 transition-transform hover:scale-125"
 		>
 			<div class="flex h-12 w-12 items-center justify-center">
-				<img src="/assets/microphone.svg" alt="Mic" class="h-20 w-20" />
+				<img src="/assets/microphone.svg" alt="Mic" class="h-30 w-30" />
 			</div>
 		</button>
 
@@ -86,7 +85,7 @@
 			class="flex cursor-pointer flex-col items-center gap-1 transition-transform hover:scale-125"
 		>
 			<div class="flex h-12 w-12 items-center justify-center">
-				<img src="/assets/disc.svg" alt="Music" class="h-20 w-20" />
+				<img src="/assets/disc.svg" alt="Music" class="h-30 w-30" />
 			</div>
 		</button>
 
@@ -96,7 +95,7 @@
 			class="flex cursor-pointer flex-col items-center gap-1 transition-transform hover:scale-125"
 		>
 			<div class="flex h-12 w-12 items-center justify-center">
-				<img src="/assets/pencil.svg" alt="Doodle" class="h-20 w-20" />
+				<img src="/assets/pencil.svg" alt="Doodle" class="h-30 w-30" />
 			</div>
 		</button>
 	</div>

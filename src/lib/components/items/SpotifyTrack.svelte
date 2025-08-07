@@ -70,6 +70,9 @@
 		class="transform rounded-lg bg-white shadow-lg transition-all duration-200 hover:scale-105"
 		class:ring-2={isSelected}
 		class:ring-blue-500={isSelected}
+	>
+		<!-- Spotify Embed -->
+		{#if item.metadata?.spotifyUrl}
 			<iframe
 				src={item.metadata.spotifyUrl}
 				width="300"
@@ -78,9 +81,6 @@
 				allow="encrypted-media"
 				class="rounded-t-lg"
 				title="Spotify track player"
-			></iframe>
-				allow="encrypted-media"
-				class="rounded-t-lg"
 			></iframe>
 		{:else}
 			<!-- Fallback -->
