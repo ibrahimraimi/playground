@@ -95,7 +95,9 @@
 		<div class="w-[600px] max-w-[95vw] rounded-xl bg-white p-6 shadow-xl">
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="text-xl font-semibold">Draw a doodle</h2>
-				<button on:click={closeModal} class="text-gray-500 hover:text-gray-700"> × </button>
+				<button on:click={closeModal} class="cursor-pointer text-gray-500 hover:text-gray-700">
+					<img src="/assets/keyboard-asterisk.svg" alt="Mic" class="h-6 w-6 text-white" />
+				</button>
 			</div>
 
 			<div class="space-y-4">

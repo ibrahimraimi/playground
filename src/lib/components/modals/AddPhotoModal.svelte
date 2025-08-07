@@ -57,7 +57,9 @@
 		<div class="w-96 max-w-[90vw] rounded-xl bg-white p-6 shadow-xl">
 			<div class="mb-4 flex items-center justify-between">
 				<h2 class="text-xl font-semibold">Add a photo</h2>
-				<button on:click={closeModal} class="text-gray-500 hover:text-gray-700"> × </button>
+				<button on:click={closeModal} class="cursor-pointer text-gray-500 hover:text-gray-700">
+					<img src="/assets/keyboard-asterisk.svg" alt="Mic" class="h-6 w-6 text-white" />
+				</button>
 			</div>
 
 			<div class="space-y-4">
@@ -66,7 +68,7 @@
 						on:click={() => fileInput.click()}
 						class="flex flex-1 flex-col items-center gap-2 rounded-xl border-2 border-gray-300 bg-white p-4 transition-colors hover:border-gray-400"
 					>
-						<Upload class="h-8 w-8 text-gray-600" />
+						<img src="/assets/upload.svg" alt="upload" class="h-8 w-8 text-white" />
 						<span class="text-sm text-gray-600">Choose file</span>
 					</button>
 
@@ -74,7 +76,7 @@
 						on:click={handleTakePhoto}
 						class="flex flex-1 flex-col items-center gap-2 rounded-xl border-2 border-gray-300 bg-white p-4 transition-colors hover:border-gray-400"
 					>
-						<Camera class="h-8 w-8 text-gray-600" />
+						<img src="/assets/camera.svg" alt="Camera" class="h-8 w-8 text-white" />
 						<span class="text-sm text-gray-600">Take photo</span>
 					</button>
 				</div>
