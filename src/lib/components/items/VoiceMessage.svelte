@@ -85,6 +85,8 @@
 	class="relative cursor-move select-none"
 	class:selected={isSelected}
 	on:mousedown={handleMouseDown}
+	role="button"
+	tabindex="0"
 >
 	<!-- Voice Message Container -->
 	<div
