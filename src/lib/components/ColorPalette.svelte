@@ -19,6 +19,7 @@
 				: 'border-gray-300'}"
 			style="background-color: {color.value}"
 			title={color.label}
+			aria-label={color.label}
 		></button>
 	{/each}
 </div>

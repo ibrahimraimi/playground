@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import DigitalCanvas from '$lib/components/DigitalCanvas.svelte';
+
+	import type { CanvasItem } from '$lib/types';
 	import Toolbar from '$lib/components/Toolbar.svelte';
+	import { createCanvasStore } from '$lib/stores/canvasStore';
+	import DigitalCanvas from '$lib/components/DigitalCanvas.svelte';
 	import AddPhotoModal from '$lib/components/modals/AddPhotoModal.svelte';
-	import AddStickyNoteModal from '$lib/components/modals/AddStickyNoteModal.svelte';
-	import RecordVoiceModal from '$lib/components/modals/RecordVoiceModal.svelte';
 	import AddSpotifyModal from '$lib/components/modals/AddSpotifyModal.svelte';
 	import DrawDoodleModal from '$lib/components/modals/DrawDoodleModal.svelte';
-	import { createCanvasStore } from '$lib/stores/canvasStore';
-	import type { CanvasItem } from '$lib/types';
+	import RecordVoiceModal from '$lib/components/modals/RecordVoiceModal.svelte';
+	import AddStickyNoteModal from '$lib/components/modals/AddStickyNoteModal.svelte';
 
 	const canvasStore = createCanvasStore();
 

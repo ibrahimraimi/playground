@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { CanvasItem } from '$lib/types';
-	import StickyNote from './items/StickyNote.svelte';
 	import PhotoItem from './items/PhotoItem.svelte';
+	import DoodleItem from './items/DoodleItem.svelte';
+	import StickyNote from './items/StickyNote.svelte';
 	import VoiceMessage from './items/VoiceMessage.svelte';
 	import SpotifyTrack from './items/SpotifyTrack.svelte';
-	import DoodleItem from './items/DoodleItem.svelte';
 
 	export let canvasStore: any;
 
