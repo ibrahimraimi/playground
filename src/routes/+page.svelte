@@ -10,6 +10,7 @@
 	import DrawDoodleModal from '$lib/components/modals/DrawDoodleModal.svelte';
 	import RecordVoiceModal from '$lib/components/modals/RecordVoiceModal.svelte';
 	import AddStickyNoteModal from '$lib/components/modals/AddStickyNoteModal.svelte';
+	import ExportModal from '$lib/components/modals/ExportModal.svelte';
 
 	const canvasStore = createCanvasStore();
 
@@ -19,6 +20,7 @@
 	let showVoiceModal = false;
 	let showSpotifyModal = false;
 	let showDoodleModal = false;
+	let showExportModal = false;
 	let selectedColor = 'white';
 
 	onMount(() => {
@@ -56,6 +58,7 @@
 			bind:showVoiceModal
 			bind:showSpotifyModal
 			bind:showDoodleModal
+			bind:showExportModal
 			bind:selectedColor
 		/>
 	</div>
@@ -79,5 +82,9 @@
 
 	{#if showDoodleModal}
 		<DrawDoodleModal {canvasStore} bind:showModal={showDoodleModal} />
+	{/if}
+
+	{#if showExportModal}
+		<ExportModal {canvasStore} bind:showModal={showExportModal} />
 	{/if}
 </main>
