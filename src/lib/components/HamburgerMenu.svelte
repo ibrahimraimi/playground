@@ -34,7 +34,7 @@
 		closeMenu();
 	}
 
-		async function generateShareableLink() {
+	async function generateShareableLink() {
 		try {
 			const canvasData: CanvasState = {
 				items: $canvasStore.items,
@@ -48,59 +48,62 @@
 				return;
 			}
 
-					// Use LZ-String compression for much better compression
-		const dataStr = JSON.stringify(canvasData);
-		const compressedData = LZString.compressToEncodedURIComponent(dataStr);
+			// Use LZ-String compression for much better compression
+			const dataStr = JSON.stringify(canvasData);
+			const compressedData = LZString.compressToEncodedURIComponent(dataStr);
 
-		// Create shareable URL with compressed data
-		const shareableUrl = `${window.location.origin}${window.location.pathname}?data=${compressedData}`;
-		
-		// Check if the URL is still too long (very unlikely with LZ-String)
-		if (shareableUrl.length > 8000) { // Increased limit due to better compression
-			// Fallback to localStorage approach for extremely large canvases
-			const shareId = crypto.randomUUID();
-			const shareData = {
-				data: canvasData,
-				timestamp: Date.now(),
-				expires: Date.now() + (7 * 24 * 60 * 60 * 1000) // 7 days
-			};
+			// Create shareable URL with compressed data
+			const shareableUrl = `${window.location.origin}${window.location.pathname}?data=${compressedData}`;
 
-			// Store in localStorage
-			localStorage.setItem(`playground_share_${shareId}`, JSON.stringify(shareData));
+			// Check if the URL is still too long (very unlikely with LZ-String)
+			if (shareableUrl.length > 8000) {
+				// Increased limit due to better compression
+				// Fallback to localStorage approach for extremely large canvases
+				const shareId = crypto.randomUUID();
+				const shareData = {
+					data: canvasData,
+					timestamp: Date.now(),
+					expires: Date.now() + 7 * 24 * 60 * 60 * 1000 // 7 days
+				};
 
-			// Create shareable URL with just the ID
-			const fallbackUrl = `${window.location.origin}${window.location.pathname}?share=${shareId}`;
+				// Store in localStorage
+				localStorage.setItem(`playground_share_${shareId}`, JSON.stringify(shareData));
+
+				// Create shareable URL with just the ID
+				const fallbackUrl = `${window.location.origin}${window.location.pathname}?share=${shareId}`;
+
+				// Copy to clipboard
+				navigator.clipboard
+					.writeText(fallbackUrl)
+					.then(() => {
+						toast.success(
+							'Shareable link copied to clipboard! This link will work for 7 days and requires the recipient to have visited the site before.'
+						);
+					})
+					.catch(() => {
+						// Fallback: show the URL in a toast
+						toast.success(
+							`Shareable link generated! Copy this URL:\n\n${fallbackUrl}\n\nNote: This link works for 7 days and requires the recipient to have visited the site before.`
+						);
+					});
+				closeMenu();
+				return;
+			}
 
 			// Copy to clipboard
 			navigator.clipboard
-				.writeText(fallbackUrl)
+				.writeText(shareableUrl)
 				.then(() => {
 					toast.success(
-						'Shareable link copied to clipboard! This link will work for 7 days and requires the recipient to have visited the site before.'
+						'Shareable link copied to clipboard! Share this link with others to let them view your digital playground.'
 					);
 				})
 				.catch(() => {
 					// Fallback: show the URL in a toast
-					toast.success(`Shareable link generated! Copy this URL:\n\n${fallbackUrl}\n\nNote: This link works for 7 days and requires the recipient to have visited the site before.`);
+					toast.success(`Shareable link generated! Copy this URL:\n\n${shareableUrl}`);
 				});
+
 			closeMenu();
-			return;
-		}
-
-					// Copy to clipboard
-		navigator.clipboard
-			.writeText(shareableUrl)
-			.then(() => {
-				toast.success(
-					'Shareable link copied to clipboard! Share this link with others to let them view your digital playground.'
-				);
-			})
-			.catch(() => {
-				// Fallback: show the URL in a toast
-				toast.success(`Shareable link generated! Copy this URL:\n\n${shareableUrl}`);
-			});
-
-		closeMenu();
 		} catch (error) {
 			console.error('Error generating shareable link:', error);
 			toast.error('Failed to generate shareable link. Please try again.');
