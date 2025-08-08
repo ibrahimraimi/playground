@@ -1,4 +1,4 @@
-# Digital Letter Creator 🎨
+# Digital Playground 🎨
 
 A playful web application for creating digital letters with various interactive elements. Built with SvelteKit, TypeScript, and Tailwind CSS.
 
