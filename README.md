@@ -11,12 +11,14 @@ A creative web application for building interactive digital letters and layouts 
 ## ✨ Features
 
 ### 🎯 Core Functionality
+
 - **Interactive Digital Canvas**: Drag-and-drop interface for creating digital layouts
 - **Multi-element Support**: Add sticky notes, photos, voice messages, Spotify tracks, and doodles
 - **Real-time Editing**: Live editing with instant visual feedback
 - **Responsive Design**: Works seamlessly across desktop and mobile devices
 
 ### 📝 Content Elements
+
 - **Sticky Notes**: Text-based notes with customizable colors and rotation
 - **Photo Upload**: Drag-and-drop image support with automatic resizing
 - **Voice Messages**: Record and play audio messages with duration display
@@ -24,15 +26,17 @@ A creative web application for building interactive digital letters and layouts 
 - **Drawing Tool**: Freehand doodling with customizable brush sizes and colors
 
 ### 📤 Export & Sharing
+
 - **JSON Export**: Save and reload exact canvas layouts
 - **Shareable Links**: Generate URLs that encode canvas data for easy sharing
 - **Load Layouts**: Import previously saved JSON files
 - **PNG/PDF Export**: Coming soon - export canvas as images
 
 ### 🎨 User Interface
+
 - **Modern Design**: Clean, intuitive interface with smooth animations
 - **Floating Hamburger Menu**: Fixed top-right menu with dropdown options
-- **Keyboard Shortcuts**: 
+- **Keyboard Shortcuts**:
   - `Ctrl+O`: Open file
   - `Ctrl+Shift+E`: Export layout
   - `Ctrl+Shift+S`: Generate shareable link
@@ -42,23 +46,27 @@ A creative web application for building interactive digital letters and layouts 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - pnpm (recommended) or npm
 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
-   git clone https://github.com/ibrahimraimi/playground.git
-   cd playground
+   git clone https://github.com/ibrahimraimi/digital-playground.git
+   cd digital-playground
    ```
 
 2. **Install dependencies**
+
    ```bash
    pnpm install
    ```
 
 3. **Start development server**
+
    ```bash
    pnpm dev
    ```
@@ -94,10 +102,10 @@ pnpm preview
 
 ### Keyboard Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+O` | Open saved layout file |
-| `Ctrl+Shift+E` | Export current layout |
+| Shortcut       | Action                  |
+| -------------- | ----------------------- |
+| `Ctrl+O`       | Open saved layout file  |
+| `Ctrl+Shift+E` | Export current layout   |
 | `Ctrl+Shift+S` | Generate shareable link |
 
 ### Voice Recording
@@ -197,6 +205,7 @@ This project follows [Conventional Commits](https://www.conventionalcommits.org/
 ### Other Platforms
 
 The app can be deployed to any static hosting platform:
+
 - Vercel
 - GitHub Pages
 - Cloudflare Pages
@@ -224,8 +233,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/ibrahimraimi/playground/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/ibrahimraimi/playground/discussions)
+- **Issues**: [GitHub Issues](https://github.com/ibrahimraimi/digital-playground/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/ibrahimraimi/digital-playground/discussions)
 - **Email**: [Contact via GitHub](https://github.com/ibrahimraimi)
 
 ---

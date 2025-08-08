@@ -293,7 +293,8 @@
 			<!-- Help -->
 			<div class="p-2">
 				<button
-					on:click={() => window.open('https://github.com/ibrahimraimi/playground', '_blank')}
+					on:click={() =>
+						window.open('https://github.com/ibrahimraimi/digital-playground', '_blank')}
 					class="flex w-full items-center gap-3 rounded px-3 py-2 text-left transition-colors hover:bg-gray-100"
 				>
 					<svg class="h-4 w-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
