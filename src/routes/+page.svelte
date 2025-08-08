@@ -13,6 +13,7 @@
 	import ExportModal from '$lib/components/modals/ExportModal.svelte';
 	import HamburgerMenu from '$lib/components/HamburgerMenu.svelte';
 	import toast from 'svelte-french-toast';
+	import LZString from 'lz-string';
 
 	const canvasStore = createCanvasStore();
 
@@ -69,12 +70,74 @@
 		// Check for shared link data in URL
 		const urlParams = new URLSearchParams(window.location.search);
 		const sharedData = urlParams.get('data');
+		const shareId = urlParams.get('share');
 
-		if (sharedData) {
+		// Handle new share ID parameter (for large canvases)
+		if (shareId) {
 			try {
-				// Decode the shared data
-				const decodedData = decodeURIComponent(escape(atob(sharedData)));
-				const canvasData = JSON.parse(decodedData);
+				const storageKey = `playground_share_${shareId}`;
+				const storedData = localStorage.getItem(storageKey);
+
+				if (storedData) {
+					const shareData = JSON.parse(storedData);
+					
+					// Check if the share has expired
+					if (shareData.expires && Date.now() > shareData.expires) {
+						localStorage.removeItem(storageKey);
+						toast.error('This shareable link has expired. Please request a new one.');
+						return;
+					}
+
+					const canvasData = shareData.data;
+
+					// Reset current canvas and load shared data
+					canvasStore.reset();
+
+					// Add all items from the shared data
+					canvasData.items.forEach((item: any) => {
+						canvasStore.addItem({
+							type: item.type,
+							content: item.content,
+							position: item.position,
+							rotation: item.rotation,
+							color: item.color,
+							metadata: item.metadata
+						});
+					});
+
+					// Clear the URL parameter
+					const newUrl = window.location.pathname;
+					window.history.replaceState({}, '', newUrl);
+
+					toast.success('Shared layout loaded successfully!');
+				} else {
+					toast.error('Shareable link not found. It may have expired or been removed.');
+				}
+			} catch (error) {
+				console.error('Error loading shared layout:', error);
+				toast.error('Failed to load shared layout. The link might be invalid or corrupted.');
+			}
+		}
+		// Handle data parameter (now using LZ-String compression)
+		else if (sharedData) {
+			try {
+				// Try LZ-String decompression first (new format)
+				let canvasData;
+				try {
+					const decompressedData = LZString.decompressFromEncodedURIComponent(sharedData);
+					if (decompressedData) {
+						canvasData = JSON.parse(decompressedData);
+					} else {
+						throw new Error('LZ-String decompression failed');
+					}
+				} catch (lzError) {
+					// Fallback to old base64 format for backward compatibility
+					const paddedData = sharedData + '='.repeat((4 - (sharedData.length % 4)) % 4);
+					const decodedData = decodeURIComponent(
+						escape(atob(paddedData.replace(/-/g, '+').replace(/_/g, '/')))
+					);
+					canvasData = JSON.parse(decodedData);
+				}
 
 				// Reset current canvas and load shared data
 				canvasStore.reset();

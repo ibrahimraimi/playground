@@ -14,12 +14,14 @@ Digital Playground is a creative web application that allows users to build inte
 ### ✨ Features
 
 #### Core Canvas Functionality
+
 - **Interactive Digital Canvas**: Drag-and-drop interface for creating digital layouts
 - **Multi-element Support**: Add sticky notes, photos, voice messages, Spotify tracks, and doodles
 - **Real-time Editing**: Live editing with instant visual feedback
 - **Responsive Design**: Works seamlessly across desktop and mobile devices
 
 #### Content Elements
+
 - **Sticky Notes**: Text-based notes with customizable colors and rotation
 - **Photo Upload**: Drag-and-drop image support with automatic resizing
 - **Voice Messages**: Record and play audio messages with duration display
@@ -27,15 +29,17 @@ Digital Playground is a creative web application that allows users to build inte
 - **Drawing Tool**: Freehand doodling with customizable brush sizes and colors
 
 #### Export & Sharing
+
 - **JSON Export**: Save and reload exact canvas layouts
 - **Shareable Links**: Generate URLs that encode canvas data for easy sharing
 - **Load Layouts**: Import previously saved JSON files
 - **PNG/PDF Export**: Coming soon - export canvas as images (currently in development)
 
 #### User Interface
+
 - **Modern Design**: Clean, intuitive interface with smooth animations
 - **Floating Hamburger Menu**: Fixed top-right menu with dropdown options
-- **Keyboard Shortcuts**: 
+- **Keyboard Shortcuts**:
   - `Ctrl+O`: Open file
   - `Ctrl+Shift+E`: Export layout
   - `Ctrl+Shift+S`: Generate shareable link
@@ -43,6 +47,7 @@ Digital Playground is a creative web application that allows users to build inte
 - **Customizable Background**: Change canvas background color with preset options
 
 #### Technical Features
+
 - **SvelteKit Framework**: Modern, fast web application framework
 - **Tailwind CSS**: Utility-first CSS framework with custom color palette
 - **TypeScript**: Full type safety and better development experience
@@ -116,6 +121,7 @@ Digital Playground is a creative web application that allows users to build inte
 ## [0.0.1] - Pre-release Development
 
 ### 🚧 Development Phase
+
 - Initial project setup with SvelteKit
 - Basic canvas functionality implementation
 - Core component development
@@ -129,6 +135,7 @@ Digital Playground is a creative web application that allows users to build inte
 This project follows the [Conventional Commits](https://www.conventionalcommits.org/) specification for commit messages.
 
 ### Commit Types
+
 - `feat`: New features
 - `fix`: Bug fixes
 - `docs`: Documentation changes
@@ -138,6 +145,7 @@ This project follows the [Conventional Commits](https://www.conventionalcommits.
 - `chore`: Maintenance tasks
 
 ### Release Process
+
 1. Update version in `package.json`
 2. Add entry to `CHANGELOG.md`
 3. Create git tag for the version
