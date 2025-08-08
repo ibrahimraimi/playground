@@ -7,13 +7,33 @@
 	export let canvasStore: any;
 
 	let isDragging = false;
+	let isResizing = false;
 	let startX = 0;
 	let startY = 0;
+	let startWidth = 0;
+	let startHeight = 0;
+	let resizeHandle = '';
 	let doodleElement: HTMLDivElement;
 
 	$: isSelected = $canvasStore.selectedItem === item.id;
 
 	function handleMouseDown(e: MouseEvent) {
+		// Check if clicking on a resize handle
+		const target = e.target as HTMLElement;
+		if (target.classList.contains('resize-handle')) {
+			e.preventDefault();
+			e.stopPropagation();
+			isResizing = true;
+			resizeHandle = target.dataset.handle || '';
+			startX = e.clientX;
+			startY = e.clientY;
+			startWidth = item.size?.width || 320;
+			startHeight = item.size?.height || 240;
+			canvasStore.selectItem(item.id);
+			canvasStore.bringToFront(item.id);
+			return;
+		}
+
 		e.preventDefault();
 		canvasStore.selectItem(item.id);
 		canvasStore.bringToFront(item.id);
@@ -24,6 +44,37 @@
 	}
 
 	function handleMouseMove(e: MouseEvent) {
+		if (isResizing) {
+			const deltaX = e.clientX - startX;
+			const deltaY = e.clientY - startY;
+
+			let newWidth = startWidth;
+			let newHeight = startHeight;
+
+			// Calculate new size based on resize handle
+			switch (resizeHandle) {
+				case 'se':
+					newWidth = Math.max(100, startWidth + deltaX);
+					newHeight = Math.max(100, startHeight + deltaY);
+					break;
+				case 'sw':
+					newWidth = Math.max(100, startWidth - deltaX);
+					newHeight = Math.max(100, startHeight + deltaY);
+					break;
+				case 'ne':
+					newWidth = Math.max(100, startWidth + deltaX);
+					newHeight = Math.max(100, startHeight - deltaY);
+					break;
+				case 'nw':
+					newWidth = Math.max(100, startWidth - deltaX);
+					newHeight = Math.max(100, startHeight - deltaY);
+					break;
+			}
+
+			canvasStore.resizeItem(item.id, { width: newWidth, height: newHeight });
+			return;
+		}
+
 		if (!isDragging) return;
 
 		const newX = e.clientX - startX;
@@ -34,6 +85,8 @@
 
 	function handleMouseUp() {
 		isDragging = false;
+		isResizing = false;
+		resizeHandle = '';
 	}
 
 	function handleDelete() {
@@ -66,21 +119,22 @@
 >
 	<!-- Doodle Container -->
 	<div
-		class="transform rounded-lg bg-white shadow-lg transition-all duration-200 hover:scale-105"
-		class:ring-2={isSelected}
-		class:ring-blue-500={isSelected}
+		class="transform rounded-lg bg-white shadow-lg transition-all duration-200"
+		class:ring-1={isSelected}
+		class:ring-gray-300={isSelected}
+		style="width: {item.size?.width || 320}px; height: {item.size?.height || 240}px;"
 	>
 		<!-- Doodle Image -->
 		{#if item.metadata?.drawingData}
 			<img
 				src={item.metadata.drawingData}
 				alt="Doodle"
-				class="h-60 w-80 rounded-lg object-contain"
+				class="h-full w-full rounded-lg object-contain"
 				draggable="false"
 			/>
 		{:else}
 			<!-- Fallback -->
-			<div class="flex h-60 w-80 items-center justify-center rounded-lg bg-gray-100">
+			<div class="flex h-full w-full items-center justify-center rounded-lg bg-gray-100">
 				<div class="text-gray-500">Doodle</div>
 			</div>
 		{/if}
@@ -103,6 +157,31 @@
 			>
 				<X class="h-3 w-3 text-white" />
 			</button>
+		</div>
+
+		<!-- Resize Handles (Hidden) -->
+		<div class="pointer-events-none absolute inset-0">
+			<!-- Corner resize handles -->
+			<div
+				class="resize-handle pointer-events-auto absolute -right-1 -bottom-1 h-3 w-3 cursor-se-resize rounded-full bg-transparent"
+				data-handle="se"
+				title="Resize"
+			></div>
+			<div
+				class="resize-handle pointer-events-auto absolute -bottom-1 -left-1 h-3 w-3 cursor-sw-resize rounded-full bg-transparent"
+				data-handle="sw"
+				title="Resize"
+			></div>
+			<div
+				class="resize-handle pointer-events-auto absolute -top-1 -right-1 h-3 w-3 cursor-ne-resize rounded-full bg-transparent"
+				data-handle="ne"
+				title="Resize"
+			></div>
+			<div
+				class="resize-handle pointer-events-auto absolute -top-1 -left-1 h-3 w-3 cursor-nw-resize rounded-full bg-transparent"
+				data-handle="nw"
+				title="Resize"
+			></div>
 		</div>
 	{/if}
 </div>

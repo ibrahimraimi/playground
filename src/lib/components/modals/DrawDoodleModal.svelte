@@ -74,6 +74,7 @@
 			type: 'doodle',
 			content: 'Doodle',
 			position: { x: 100, y: 100 },
+			size: { width: 320, height: 240 }, // Default size for doodles
 			rotation: 0,
 			metadata: {
 				drawingData

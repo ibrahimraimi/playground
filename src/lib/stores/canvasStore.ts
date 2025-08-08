@@ -1,5 +1,5 @@
 import { writable, type Writable } from 'svelte/store';
-import type { CanvasItem, CanvasState, Position } from '$lib/types';
+import type { CanvasItem, CanvasState, Position, Size } from '$lib/types';
 
 function createCanvasStore() {
 	const initialState: CanvasState = {
@@ -56,6 +56,12 @@ function createCanvasStore() {
 			update((state) => ({
 				...state,
 				items: state.items.map((item) => (item.id === id ? { ...item, rotation } : item))
+			}));
+		},
+		resizeItem: (id: string, size: Size) => {
+			update((state) => ({
+				...state,
+				items: state.items.map((item) => (item.id === id ? { ...item, size } : item))
 			}));
 		},
 		bringToFront: (id: string) => {

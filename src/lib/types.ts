@@ -5,11 +5,17 @@ export interface Position {
 	y: number;
 }
 
+export interface Size {
+	width: number;
+	height: number;
+}
+
 export interface CanvasItem {
 	id: string;
 	type: ItemType;
 	content: string;
 	position: Position;
+	size: Size;
 	rotation: number;
 	color?: string;
 	zIndex: number;

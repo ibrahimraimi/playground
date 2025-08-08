@@ -7,21 +7,13 @@
 	export let canvasStore: any;
 
 	let isDragging = false;
+	let isMouseDown = false;
+	let dragTimeout: number;
 	let startX = 0;
 	let startY = 0;
 	let spotifyElement: HTMLDivElement;
 
 	$: isSelected = $canvasStore.selectedItem === item.id;
-
-	function handleMouseDown(e: MouseEvent) {
-		e.preventDefault();
-		canvasStore.selectItem(item.id);
-		canvasStore.bringToFront(item.id);
-
-		startX = e.clientX - item.position.x;
-		startY = e.clientY - item.position.y;
-		isDragging = true;
-	}
 
 	function handleMouseMove(e: MouseEvent) {
 		if (!isDragging) return;
@@ -32,8 +24,41 @@
 		canvasStore.moveItem(item.id, { x: newX, y: newY });
 	}
 
+	function handleMouseDown(e: MouseEvent) {
+		// Check if clicking on an iframe (Spotify player)
+		const target = e.target as HTMLElement;
+		if (target.tagName === 'IFRAME' || target.closest('iframe')) {
+			// Don't start dragging if clicking on the iframe content
+			canvasStore.selectItem(item.id);
+			canvasStore.bringToFront(item.id);
+			return;
+		}
+
+		e.preventDefault();
+		canvasStore.selectItem(item.id);
+		canvasStore.bringToFront(item.id);
+
+		startX = e.clientX - item.position.x;
+		startY = e.clientY - item.position.y;
+		isMouseDown = true;
+
+		// Start drag after a short delay to distinguish between click and drag
+		dragTimeout = window.setTimeout(() => {
+			if (isMouseDown) {
+				isDragging = true;
+			}
+		}, 150);
+	}
+
 	function handleMouseUp() {
 		isDragging = false;
+		isMouseDown = false;
+
+		// Clear the drag timeout
+		if (dragTimeout) {
+			clearTimeout(dragTimeout);
+			dragTimeout = 0;
+		}
 	}
 
 	function handleDelete() {
@@ -67,35 +92,30 @@
 >
 	<!-- Spotify Track Container -->
 	<div
-		class="transform rounded-lg bg-white shadow-lg transition-all duration-200 hover:scale-105"
-		class:ring-2={isSelected}
-		class:ring-blue-500={isSelected}
+		class="relative transform overflow-hidden rounded-lg bg-white p-2 shadow-lg transition-all duration-200"
+		class:ring-1={isSelected}
+		class:ring-gray-300={isSelected}
+		style="width: {item.size?.width || 300}px; height: {item.size?.height || 100}px;"
 	>
-		<!-- Spotify Embed -->
+		<!-- Original Spotify Embed -->
 		{#if item.metadata?.spotifyUrl}
 			<iframe
-				src={item.metadata.spotifyUrl}
-				width="300"
-				height="80"
+				src={item.metadata?.spotifyUrl}
+				width="100%"
+				height="100%"
 				style="border: none;"
 				allow="encrypted-media"
-				class="rounded-t-lg"
 				title="Spotify track player"
 			></iframe>
 		{:else}
 			<!-- Fallback -->
-			<div class="flex h-20 w-80 items-center justify-center rounded-t-lg bg-gray-100">
+			<div class="flex h-full w-full items-center justify-center bg-gray-100">
 				<div class="flex items-center gap-2 text-gray-500">
 					<Music class="h-5 w-5" />
 					<span>Spotify Track</span>
 				</div>
 			</div>
 		{/if}
-
-		<!-- Title -->
-		<div class="border-t p-3">
-			<p class="text-sm font-medium text-gray-900">{item.content}</p>
-		</div>
 	</div>
 
 	<!-- Controls (only show when selected) -->

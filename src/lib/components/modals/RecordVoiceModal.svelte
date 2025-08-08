@@ -111,6 +111,7 @@
 				type: 'voice-message',
 				content: recordingName.trim(),
 				position: { x: 100, y: 100 },
+				size: { width: 280, height: 120 }, // Default size for voice messages
 				rotation: 0,
 				metadata: {
 					audioUrl,

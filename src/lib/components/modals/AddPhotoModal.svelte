@@ -30,6 +30,7 @@
 					type: 'photo',
 					content: caption || 'Photo',
 					position: { x: 100, y: 100 },
+					size: { width: 320, height: 240 }, // Default size for photos
 					rotation: 0,
 					metadata: {
 						fileUrl,

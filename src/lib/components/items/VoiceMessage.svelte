@@ -7,8 +7,12 @@
 	export let canvasStore: any;
 
 	let isDragging = false;
+	let isResizing = false;
 	let startX = 0;
 	let startY = 0;
+	let startWidth = 0;
+	let startHeight = 0;
+	let resizeHandle = '';
 	let isPlaying = false;
 	let audioElement: HTMLAudioElement;
 	let voiceElement: HTMLDivElement;
@@ -16,6 +20,22 @@
 	$: isSelected = $canvasStore.selectedItem === item.id;
 
 	function handleMouseDown(e: MouseEvent) {
+		// Check if clicking on a resize handle
+		const target = e.target as HTMLElement;
+		if (target.classList.contains('resize-handle')) {
+			e.preventDefault();
+			e.stopPropagation();
+			isResizing = true;
+			resizeHandle = target.dataset.handle || '';
+			startX = e.clientX;
+			startY = e.clientY;
+			startWidth = item.size?.width || 280;
+			startHeight = item.size?.height || 120;
+			canvasStore.selectItem(item.id);
+			canvasStore.bringToFront(item.id);
+			return;
+		}
+
 		e.preventDefault();
 		canvasStore.selectItem(item.id);
 		canvasStore.bringToFront(item.id);
@@ -26,6 +46,37 @@
 	}
 
 	function handleMouseMove(e: MouseEvent) {
+		if (isResizing) {
+			const deltaX = e.clientX - startX;
+			const deltaY = e.clientY - startY;
+
+			let newWidth = startWidth;
+			let newHeight = startHeight;
+
+			// Calculate new size based on resize handle
+			switch (resizeHandle) {
+				case 'se':
+					newWidth = Math.max(150, startWidth + deltaX);
+					newHeight = Math.max(80, startHeight + deltaY);
+					break;
+				case 'sw':
+					newWidth = Math.max(150, startWidth - deltaX);
+					newHeight = Math.max(80, startHeight + deltaY);
+					break;
+				case 'ne':
+					newWidth = Math.max(150, startWidth + deltaX);
+					newHeight = Math.max(80, startHeight - deltaY);
+					break;
+				case 'nw':
+					newWidth = Math.max(150, startWidth - deltaX);
+					newHeight = Math.max(80, startHeight - deltaY);
+					break;
+			}
+
+			canvasStore.resizeItem(item.id, { width: newWidth, height: newHeight });
+			return;
+		}
+
 		if (!isDragging) return;
 
 		const newX = e.clientX - startX;
@@ -36,6 +87,8 @@
 
 	function handleMouseUp() {
 		isDragging = false;
+		isResizing = false;
+		resizeHandle = '';
 	}
 
 	function handleDelete() {
@@ -93,9 +146,10 @@
 >
 	<!-- Voice Message Container -->
 	<div
-		class="transform rounded-lg bg-white p-4 shadow-lg transition-all duration-200 hover:scale-105"
-		class:ring-2={isSelected}
-		class:ring-blue-500={isSelected}
+		class="transform rounded-lg bg-white p-4 shadow-lg transition-all duration-200"
+		class:ring-1={isSelected}
+		class:ring-gray-300={isSelected}
+		style="width: {item.size?.width || 280}px; height: {item.size?.height || 120}px;"
 	>
 		<div class="flex items-center gap-3">
 			<!-- Play/Pause Button -->
@@ -142,6 +196,31 @@
 			>
 				<X class="h-3 w-3 text-white" />
 			</button>
+		</div>
+
+		<!-- Resize Handles (Hidden) -->
+		<div class="pointer-events-none absolute inset-0">
+			<!-- Corner resize handles -->
+			<div
+				class="resize-handle pointer-events-auto absolute -right-1 -bottom-1 h-3 w-3 cursor-se-resize rounded-full bg-transparent"
+				data-handle="se"
+				title="Resize"
+			></div>
+			<div
+				class="resize-handle pointer-events-auto absolute -bottom-1 -left-1 h-3 w-3 cursor-sw-resize rounded-full bg-transparent"
+				data-handle="sw"
+				title="Resize"
+			></div>
+			<div
+				class="resize-handle pointer-events-auto absolute -top-1 -right-1 h-3 w-3 cursor-ne-resize rounded-full bg-transparent"
+				data-handle="ne"
+				title="Resize"
+			></div>
+			<div
+				class="resize-handle pointer-events-auto absolute -top-1 -left-1 h-3 w-3 cursor-nw-resize rounded-full bg-transparent"
+				data-handle="nw"
+				title="Resize"
+			></div>
 		</div>
 	{/if}
 </div>

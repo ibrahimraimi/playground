@@ -13,6 +13,7 @@
 				type: 'sticky-note',
 				content: content.trim(),
 				position: { x: 100, y: 100 },
+				size: { width: 192, height: 192 }, // Default size
 				rotation: Math.random() * 20 - 10, // Random rotation between -10 and 10 degrees
 				color: selectedColor
 			};

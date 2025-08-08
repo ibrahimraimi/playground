@@ -34,6 +34,7 @@
 			type: 'sticky-note',
 			content: 'Type your note here...',
 			position: { x: 50, y: 50 },
+			size: { width: 192, height: 192 }, // 48 * 4 (h-48 w-48)
 			rotation: -5,
 			color: 'white',
 			zIndex: 1
@@ -80,7 +81,7 @@
 
 				if (storedData) {
 					const shareData = JSON.parse(storedData);
-					
+
 					// Check if the share has expired
 					if (shareData.expires && Date.now() > shareData.expires) {
 						localStorage.removeItem(storageKey);
@@ -99,6 +100,7 @@
 							type: item.type,
 							content: item.content,
 							position: item.position,
+							size: item.size || { width: 192, height: 192 }, // Default size for backward compatibility
 							rotation: item.rotation,
 							color: item.color,
 							metadata: item.metadata
@@ -148,6 +150,7 @@
 						type: item.type,
 						content: item.content,
 						position: item.position,
+						size: item.size || { width: 192, height: 192 }, // Default size for backward compatibility
 						rotation: item.rotation,
 						color: item.color,
 						metadata: item.metadata

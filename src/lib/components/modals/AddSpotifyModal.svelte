@@ -30,6 +30,7 @@
 				type: 'spotify-track',
 				content: 'Spotify Track',
 				position: { x: 100, y: 100 },
+				size: { width: 300, height: 100 }, // Default size for Spotify tracks
 				rotation: 0,
 				metadata: {
 					spotifyUrl: embedUrl
