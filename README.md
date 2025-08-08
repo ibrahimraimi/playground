@@ -36,7 +36,7 @@ A playful web application for creating digital letters with various interactive 
 
 ```bash
 git clone <repository-url>
-cd giftbox
+cd digital-letter-creator
 ```
 
 2. Install dependencies:
