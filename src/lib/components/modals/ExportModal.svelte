@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { CanvasState } from '$lib/types';
+	import toast from 'svelte-french-toast';
 
 	export let canvasStore: any;
 	export let showModal: boolean;
@@ -10,12 +11,14 @@
 		isExporting = true;
 		try {
 			// For now, just show a message that PNG export is being worked on
-			alert(
+			toast(
 				'PNG export is currently being improved. Please use JSON export to save your layout, or try the PDF export.'
 			);
 		} catch (error) {
 			console.error('Error exporting as PNG:', error);
-			alert(`Failed to export as PNG: ${error instanceof Error ? error.message : 'Unknown error'}`);
+			toast.error(
+				`Failed to export as PNG: ${error instanceof Error ? error.message : 'Unknown error'}`
+			);
 		} finally {
 			isExporting = false;
 		}
@@ -25,10 +28,12 @@
 		isExporting = true;
 		try {
 			// For now, just show a message that PDF export is being worked on
-			alert('PDF export is currently being improved. Please use JSON export to save your layout.');
+			toast('PDF export is currently being improved. Please use JSON export to save your layout.');
 		} catch (error) {
 			console.error('Error exporting as PDF:', error);
-			alert(`Failed to export as PDF: ${error instanceof Error ? error.message : 'Unknown error'}`);
+			toast.error(
+				`Failed to export as PDF: ${error instanceof Error ? error.message : 'Unknown error'}`
+			);
 		} finally {
 			isExporting = false;
 		}
@@ -55,12 +60,12 @@
 			URL.revokeObjectURL(url);
 
 			// Show success message
-			alert(
+			toast.success(
 				'Layout saved successfully! You can reload this file later to restore your digital playground.'
 			);
 		} catch (error) {
 			console.error('Error exporting as JSON:', error);
-			alert('Failed to export as JSON. Please try again.');
+			toast.error('Failed to export as JSON. Please try again.');
 		}
 	}
 

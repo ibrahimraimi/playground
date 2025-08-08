@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Mic, Play, Square } from '@lucide/svelte';
 	import type { CanvasItem } from '$lib/types';
+	import toast from 'svelte-french-toast';
 
 	export let canvasStore: any;
 	export let showModal: boolean;
@@ -55,7 +56,7 @@
 			})
 			.catch((err) => {
 				console.error('Error accessing microphone:', err);
-				alert('Could not access microphone. Please check permissions.');
+				toast.error('Could not access microphone. Please check permissions.');
 			});
 	}
 

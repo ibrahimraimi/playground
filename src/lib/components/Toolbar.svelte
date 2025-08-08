@@ -8,7 +8,7 @@
 	export let showVoiceModal: boolean;
 	export let showSpotifyModal: boolean;
 	export let showDoodleModal: boolean;
-	export let showExportModal: boolean;
+
 	export let selectedColor: string;
 
 	const dispatch = createEventDispatcher();
@@ -39,10 +39,6 @@
 
 	function handleDrawDoodle() {
 		showDoodleModal = true;
-	}
-
-	function handleExport() {
-		showExportModal = true;
 	}
 </script>
 
@@ -101,16 +97,6 @@
 		>
 			<div class="flex h-12 w-12 items-center justify-center">
 				<img src="/assets/pencil.svg" alt="Doodle" class="h-30 w-30" />
-			</div>
-		</button>
-
-		<!-- Export Board -->
-		<button
-			on:click={handleExport}
-			class="flex cursor-pointer flex-col items-center gap-1 transition-transform hover:scale-125"
-		>
-			<div class="flex h-12 w-12 items-center justify-center">
-				<img src="/assets/download.svg" alt="Doodle" class="h-30 w-30" />
 			</div>
 		</button>
 	</div>
