@@ -12,6 +12,10 @@
 	let audioChunks: Blob[] = [];
 	let audioUrl: string | null = null;
 	let audioElement: HTMLAudioElement;
+	let recordingDuration = 0;
+	let recordingStartTime = 0;
+	let currentRecordingTime = 0;
+	let recordingInterval: number | null = null;
 
 	function startRecording() {
 		navigator.mediaDevices
@@ -19,6 +23,8 @@
 			.then((stream) => {
 				mediaRecorder = new MediaRecorder(stream);
 				audioChunks = [];
+				recordingStartTime = Date.now();
+				currentRecordingTime = 0;
 
 				mediaRecorder.ondataavailable = (event) => {
 					audioChunks.push(event.data);
@@ -28,10 +34,24 @@
 					const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
 					audioUrl = URL.createObjectURL(audioBlob);
 					audioElement.src = audioUrl;
+
+					// Calculate duration from recording time
+					recordingDuration = (Date.now() - recordingStartTime) / 1000;
+
+					// Stop the timer
+					if (recordingInterval) {
+						clearInterval(recordingInterval);
+						recordingInterval = null;
+					}
 				};
 
 				mediaRecorder.start();
 				isRecording = true;
+
+				// Start the timer for live duration display
+				recordingInterval = setInterval(() => {
+					currentRecordingTime = (Date.now() - recordingStartTime) / 1000;
+				}, 100);
 			})
 			.catch((err) => {
 				console.error('Error accessing microphone:', err);
@@ -44,6 +64,12 @@
 			mediaRecorder.stop();
 			mediaRecorder.stream.getTracks().forEach((track) => track.stop());
 			isRecording = false;
+
+			// Stop the timer
+			if (recordingInterval) {
+				clearInterval(recordingInterval);
+				recordingInterval = null;
+			}
 		}
 	}
 
@@ -53,13 +79,29 @@
 				audioElement.pause();
 				isPlaying = false;
 			} else {
-				audioElement.play();
-				isPlaying = true;
-				audioElement.onended = () => {
-					isPlaying = false;
-				};
+				audioElement
+					.play()
+					.then(() => {
+						isPlaying = true;
+					})
+					.catch((err) => {
+						console.error('Error playing audio:', err);
+					});
 			}
 		}
+	}
+
+	// Set up audio event listeners
+	$: if (audioElement) {
+		audioElement.onended = () => {
+			isPlaying = false;
+		};
+		audioElement.onpause = () => {
+			isPlaying = false;
+		};
+		audioElement.onplay = () => {
+			isPlaying = true;
+		};
 	}
 
 	function handleAddVoiceMessage() {
@@ -71,14 +113,24 @@
 				rotation: 0,
 				metadata: {
 					audioUrl,
-					recordingDuration: audioElement.duration || 0
+					recordingDuration: recordingDuration
 				}
 			};
 			canvasStore.addItem(newItem);
 			showModal = false;
 			recordingName = '';
 			audioUrl = null;
+			recordingDuration = 0;
 		}
+	}
+
+	function formatDuration(seconds: number): string {
+		if (!seconds || isNaN(seconds) || !isFinite(seconds)) {
+			return '0:00';
+		}
+		const mins = Math.floor(seconds / 60);
+		const secs = Math.floor(seconds % 60);
+		return `${mins}:${secs.toString().padStart(2, '0')}`;
 	}
 
 	function closeModal() {
@@ -88,6 +140,8 @@
 		showModal = false;
 		recordingName = '';
 		audioUrl = null;
+		recordingDuration = 0;
+		currentRecordingTime = 0;
 	}
 </script>
 
@@ -112,16 +166,34 @@
 					/>
 				</div>
 
+				<!-- Recording Duration Display -->
+				{#if isRecording}
+					<div class="text-center">
+						<div class="font-mono text-2xl text-red-500">
+							{formatDuration(currentRecordingTime)}
+						</div>
+						<div class="text-sm text-gray-500">Recording...</div>
+					</div>
+				{:else if audioUrl}
+					<div class="text-center">
+						<div class="font-mono text-lg text-gray-700">
+							Duration: {formatDuration(recordingDuration)}
+						</div>
+					</div>
+				{/if}
+
 				<div class="flex gap-2">
 					<button
 						on:click={isRecording ? stopRecording : startRecording}
 						class="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-300 px-4 py-2 text-gray-600 hover:bg-gray-50"
+						class:bg-red-500={isRecording}
+						class:text-white={isRecording}
+						class:border-red-500={isRecording}
 					>
 						{#if isRecording}
 							<Square class="h-4 w-4" />
 							Stop Rec
 						{:else}
-							<!-- <Mic class="h-4 w-4" /> -->
 							<img src="/assets/microphone.svg" alt="Mic" class="h-6 w-6 text-white" />
 							Start Rec
 						{/if}
@@ -132,8 +204,13 @@
 						disabled={!audioUrl}
 						class="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-300 px-4 py-2 text-gray-600 hover:bg-gray-50"
 					>
-						<img src="/assets/play.svg" alt="Play" class="h-6 w-6 text-white" />
-						Play Rec
+						{#if isPlaying}
+							<Square class="h-4 w-4" />
+							Pause
+						{:else}
+							<Play class="h-4 w-4" />
+							Play
+						{/if}
 					</button>
 				</div>
 
