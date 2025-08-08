@@ -41,7 +41,7 @@
 	/>
 
 	<!-- Additional Social Media Meta Tags -->
-	<meta property="og:url" content="https://your-domain.com" />
+	<meta property="og:url" content="https://playground.ibrahimraimi.com" />
 	<meta property="og:site_name" content="Digital Playground" />
 	<meta property="og:locale" content="en_US" />
 
