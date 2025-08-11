@@ -8,6 +8,7 @@
 	import SpotifyTrack from './items/SpotifyTrack.svelte';
 
 	export let canvasStore: any;
+	export let zoomLevel = 100;
 
 	let canvasElement: HTMLDivElement;
 
@@ -21,7 +22,11 @@
 	});
 </script>
 
-<div bind:this={canvasElement} class="relative min-h-screen w-full cursor-default">
+<div
+	bind:this={canvasElement}
+	class="relative min-h-screen w-full origin-top-left cursor-default overflow-hidden"
+	style="transform: scale({zoomLevel / 100}); transform-origin: top left;"
+>
 	{#each $canvasStore.items as item (item.id)}
 		<div
 			class="absolute"

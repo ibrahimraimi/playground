@@ -12,6 +12,7 @@
 	import AddStickyNoteModal from '$lib/components/modals/AddStickyNoteModal.svelte';
 	import ExportModal from '$lib/components/modals/ExportModal.svelte';
 	import HamburgerMenu from '$lib/components/HamburgerMenu.svelte';
+	import ZoomControls from '$lib/components/ZoomControls.svelte';
 	import toast from 'svelte-french-toast';
 	import LZString from 'lz-string';
 
@@ -26,6 +27,38 @@
 	let showExportModal = false;
 	let selectedColor = 'white';
 	let canvasBackground = '#f3f4f6'; // Default light gray background
+
+	// Zoom state
+	let zoomLevel = 100;
+	const minZoom = 25;
+	const maxZoom = 400;
+	const zoomStep = 25;
+
+	// Zoom functions
+	function zoomIn() {
+		if (zoomLevel < maxZoom) {
+			zoomLevel = Math.min(maxZoom, zoomLevel + zoomStep);
+		}
+	}
+
+	function zoomOut() {
+		if (zoomLevel > minZoom) {
+			zoomLevel = Math.max(minZoom, zoomLevel - zoomStep);
+		}
+	}
+
+	function resetZoom() {
+		zoomLevel = 100;
+	}
+
+	// Undo/Redo functions
+	function handleUndo() {
+		canvasStore.undo();
+	}
+
+	function handleRedo() {
+		canvasStore.redo();
+	}
 
 	onMount(() => {
 		// Initialize with a sample sticky note
@@ -62,11 +95,45 @@
 							break;
 						}
 						break;
+					case 'z':
+						event.preventDefault();
+						if (event.shiftKey) {
+							handleRedo();
+						} else {
+							handleUndo();
+						}
+						break;
+					case '=':
+					case '+':
+						event.preventDefault();
+						zoomIn();
+						break;
+					case '-':
+						event.preventDefault();
+						zoomOut();
+						break;
+					case '0':
+						event.preventDefault();
+						zoomLevel = 100;
+						break;
+				}
+			}
+		}
+
+		// Add mouse wheel zoom support
+		function handleWheel(event: WheelEvent) {
+			if (event.ctrlKey || event.metaKey) {
+				event.preventDefault();
+				if (event.deltaY < 0) {
+					zoomIn();
+				} else {
+					zoomOut();
 				}
 			}
 		}
 
 		document.addEventListener('keydown', handleKeydown);
+		document.addEventListener('wheel', handleWheel, { passive: false });
 
 		// Check for shared link data in URL
 		const urlParams = new URLSearchParams(window.location.search);
@@ -119,11 +186,8 @@
 				console.error('Error loading shared layout:', error);
 				toast.error('Failed to load shared layout. The link might be invalid or corrupted.');
 			}
-		}
-		// Handle data parameter (now using LZ-String compression)
-		else if (sharedData) {
+		} else if (sharedData) {
 			try {
-				// Try LZ-String decompression first (new format)
 				let canvasData;
 				try {
 					const decompressedData = LZString.decompressFromEncodedURIComponent(sharedData);
@@ -170,11 +234,12 @@
 
 		return () => {
 			document.removeEventListener('keydown', handleKeydown);
+			document.removeEventListener('wheel', handleWheel);
 		};
 	});
 </script>
 
-<main class="relative min-h-screen" style="background-color: {canvasBackground}">
+<main class="relative min-h-screen overflow-hidden" style="background-color: {canvasBackground}">
 	<!-- Canvas Background with dot pattern -->
 	<div
 		class="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(0,0,0,0.1)_1px,transparent_0)] bg-[length:20px_20px]"
@@ -188,8 +253,8 @@
 	/>
 
 	<!-- Main Canvas Area -->
-	<div class="relative z-10 min-h-screen">
-		<DigitalCanvas {canvasStore} />
+	<div class="relative z-10 min-h-screen overflow-hidden">
+		<DigitalCanvas {canvasStore} {zoomLevel} />
 	</div>
 
 	<!-- Toolbar -->
@@ -204,6 +269,18 @@
 			bind:selectedColor
 		/>
 	</div>
+
+	<!-- Zoom Controls -->
+	<ZoomControls
+		{zoomLevel}
+		onZoomIn={zoomIn}
+		onZoomOut={zoomOut}
+		onUndo={handleUndo}
+		onRedo={handleRedo}
+		canUndo={canvasStore.canUndo()}
+		canRedo={canvasStore.canRedo()}
+		onResetZoom={resetZoom}
+	/>
 
 	<!-- Modals -->
 	{#if showPhotoModal}
