@@ -110,16 +110,18 @@
 							class="h-6 w-6 cursor-pointer rounded-full border-2 border-gray-300"
 							style="background-color: {currentColor}"
 							on:click={() => {
-								const input = document.createElement('input');
-								input.type = 'color';
-								input.value = currentColor;
-								input.onchange = (e) => {
-									const target = e.target as HTMLInputElement;
-									if (target) {
-										changeColor(target.value);
-									}
-								};
-								input.click();
+								if (typeof document !== 'undefined') {
+									const input = document.createElement('input');
+									input.type = 'color';
+									input.value = currentColor;
+									input.onchange = (e) => {
+										const target = e.target as HTMLInputElement;
+										if (target) {
+											changeColor(target.value);
+										}
+									};
+									input.click();
+								}
 							}}
 						></div>
 					</div>

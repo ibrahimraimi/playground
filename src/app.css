@@ -12,7 +12,7 @@
 }
 @font-face {
 	font-family: 'Assistant';
-	src: url('/fonts/Assistant/Assistant-Regular.woff2') format('woff2');
+	src: url('/fonts/assistant/Assistant-Regular.woff2') format('woff2');
 	font-weight: 400;
 	style: normal;
 	display: swap;

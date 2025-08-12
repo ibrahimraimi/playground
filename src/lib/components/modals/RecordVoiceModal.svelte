@@ -19,6 +19,11 @@
 	let recordingInterval: number | null = null;
 
 	function startRecording() {
+		if (typeof navigator === 'undefined' || !navigator.mediaDevices) {
+			toast.error('Media devices not supported in this environment.');
+			return;
+		}
+
 		navigator.mediaDevices
 			.getUserMedia({ audio: true })
 			.then((stream) => {

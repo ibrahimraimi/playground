@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { X, RotateCw, Music } from '@lucide/svelte';
+	import { Music, RotateCw, X } from '@lucide/svelte';
+	import { Button } from '$lib/components/ui/button';
 	import type { CanvasItem } from '$lib/types';
 
 	export let item: CanvasItem;
@@ -43,7 +44,7 @@
 		isMouseDown = true;
 
 		// Start drag after a short delay to distinguish between click and drag
-		dragTimeout = window.setTimeout(() => {
+		dragTimeout = (typeof window !== 'undefined' ? window.setTimeout : setTimeout)(() => {
 			if (isMouseDown) {
 				isDragging = true;
 			}

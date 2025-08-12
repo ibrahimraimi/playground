@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { X, RotateCw } from '@lucide/svelte';
+	import { Button } from '$lib/components/ui/button';
 	import type { CanvasItem } from '$lib/types';
 
 	export let item: CanvasItem;

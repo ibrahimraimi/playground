@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { Minus, Plus, RotateCcw, RotateCw, RotateCcw as RotateCcwIcon } from '@lucide/svelte';
+	import { Minus, Plus, RotateCcw as RotateCcwIcon } from '@lucide/svelte';
+
+	import Icons from '$lib/components/ui/icons.svelte';
 
 	export let zoomLevel = 100;
 	export let onZoomIn: () => void;
@@ -88,7 +90,7 @@
 			class="flex h-6 w-6 items-center justify-center text-gray-700 transition-colors hover:text-gray-900 disabled:cursor-not-allowed disabled:text-gray-400"
 			title="Undo (Ctrl+Z)"
 		>
-			<RotateCcw class="h-4 w-4" />
+			<Icons name="undo" className="h-4 w-4" />
 		</button>
 		<button
 			on:click={handleRedo}
@@ -96,7 +98,7 @@
 			class="flex h-6 w-6 items-center justify-center text-gray-700 transition-colors hover:text-gray-900 disabled:cursor-not-allowed disabled:text-gray-400"
 			title="Redo (Ctrl+Shift+Z)"
 		>
-			<RotateCw class="h-4 w-4" />
+			<Icons name="redo" className="h-4 w-4" />
 		</button>
 	</div>
 </div>

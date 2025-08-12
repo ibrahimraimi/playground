@@ -36,19 +36,16 @@
 		closeMenu();
 	}
 
-	async function generateShareableLink() {
+	function generateShareableLink() {
 		try {
+			// Only run in browser
+			if (typeof window === 'undefined') return;
+
 			const canvasData: CanvasState = {
 				items: $canvasStore.items,
 				selectedItem: null,
 				nextZIndex: $canvasStore.nextZIndex
 			};
-
-			// Check if canvas has content
-			if (canvasData.items.length === 0) {
-				toast.error('Cannot generate shareable link for an empty canvas. Add some content first!');
-				return;
-			}
 
 			// Use LZ-String compression for much better compression
 			const dataStr = JSON.stringify(canvasData);
@@ -61,7 +58,10 @@
 			if (shareableUrl.length > 8000) {
 				// Increased limit due to better compression
 				// Fallback to localStorage approach for extremely large canvases
-				const shareId = crypto.randomUUID();
+				const shareId =
+					typeof crypto !== 'undefined'
+						? crypto.randomUUID()
+						: `share_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 				const shareData = {
 					data: canvasData,
 					timestamp: Date.now(),
@@ -69,41 +69,55 @@
 				};
 
 				// Store in localStorage
-				localStorage.setItem(`playground_share_${shareId}`, JSON.stringify(shareData));
+				if (typeof localStorage !== 'undefined') {
+					localStorage.setItem(`playground_share_${shareId}`, JSON.stringify(shareData));
+				}
 
 				// Create shareable URL with just the ID
 				const fallbackUrl = `${window.location.origin}${window.location.pathname}?share=${shareId}`;
 
 				// Copy to clipboard
-				navigator.clipboard
-					.writeText(fallbackUrl)
-					.then(() => {
-						toast.success(
-							'Shareable link copied to clipboard! This link will work for 7 days and requires the recipient to have visited the site before.'
-						);
-					})
-					.catch(() => {
-						// Fallback: show the URL in a toast
-						toast.success(
-							`Shareable link generated! Copy this URL:\n\n${fallbackUrl}\n\nNote: This link works for 7 days and requires the recipient to have visited the site before.`
-						);
-					});
+				if (typeof navigator !== 'undefined' && navigator.clipboard) {
+					navigator.clipboard
+						.writeText(fallbackUrl)
+						.then(() => {
+							toast.success(
+								'Shareable link copied to clipboard! This link will work for 7 days and requires the recipient to have visited the site before.'
+							);
+						})
+						.catch(() => {
+							// Fallback: show the URL in a toast
+							toast.success(
+								`Shareable link generated! Copy this URL:\n\n${fallbackUrl}\n\nNote: This link works for 7 days and requires the recipient to have visited the site before.`
+							);
+						});
+				} else {
+					// Fallback: show the URL in a toast
+					toast.success(
+						`Shareable link generated! Copy this URL:\n\n${fallbackUrl}\n\nNote: This link works for 7 days and requires the recipient to have visited the site before.`
+					);
+				}
 				closeMenu();
 				return;
 			}
 
 			// Copy to clipboard
-			navigator.clipboard
-				.writeText(shareableUrl)
-				.then(() => {
-					toast.success(
-						'Shareable link copied to clipboard! Share this link with others to let them view your digital playground.'
-					);
-				})
-				.catch(() => {
-					// Fallback: show the URL in a toast
-					toast.success(`Shareable link generated! Copy this URL:\n\n${shareableUrl}`);
-				});
+			if (typeof navigator !== 'undefined' && navigator.clipboard) {
+				navigator.clipboard
+					.writeText(shareableUrl)
+					.then(() => {
+						toast.success(
+							'Shareable link copied to clipboard! Share this link with others to let them view your digital playground.'
+						);
+					})
+					.catch(() => {
+						// Fallback: show the URL in a toast
+						toast.success(`Shareable link generated! Copy this URL:\n\n${shareableUrl}`);
+					});
+			} else {
+				// Fallback: show the URL in a toast
+				toast.success(`Shareable link generated! Copy this URL:\n\n${shareableUrl}`);
+			}
 
 			closeMenu();
 		} catch (error) {
@@ -172,16 +186,29 @@
 	}
 
 	$: if (isOpen) {
-		setTimeout(() => {
-			document.addEventListener('click', handleClickOutside);
-		}, 0);
+		// Only add event listeners in the browser
+		if (typeof document !== 'undefined') {
+			setTimeout(() => {
+				document.addEventListener('click', handleClickOutside);
+			}, 0);
+		}
 	} else {
-		document.removeEventListener('click', handleClickOutside);
+		// Only remove event listeners in the browser
+		if (typeof document !== 'undefined') {
+			document.removeEventListener('click', handleClickOutside);
+		}
 	}
 
 	onMount(() => {
+		// Only add event listeners in the browser
+		if (typeof document !== 'undefined' && isOpen) {
+			document.addEventListener('click', handleClickOutside);
+		}
+
 		return () => {
-			document.removeEventListener('click', handleClickOutside);
+			if (typeof document !== 'undefined') {
+				document.removeEventListener('click', handleClickOutside);
+			}
 		};
 	});
 </script>
@@ -266,7 +293,11 @@
 
 			<div class="p-2">
 				<button
-					on:click={() => window.open('https://github.com/ibrahimraimi/playground', '_blank')}
+					on:click={() => {
+						if (typeof window !== 'undefined') {
+							window.open('https://github.com/ibrahimraimi/playground', '_blank');
+						}
+					}}
 					class="flex w-full items-center gap-3 rounded px-3 py-2 text-left transition-colors hover:bg-gray-100"
 				>
 					<Icons name="question" className="h-4 w-4" />

@@ -41,6 +41,9 @@
 
 	function exportAsJSON() {
 		try {
+			// Only run in browser
+			if (typeof document === 'undefined') return;
+
 			const canvasData: CanvasState = {
 				items: $canvasStore.items,
 				selectedItem: null,

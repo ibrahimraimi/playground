@@ -2,6 +2,8 @@
 	import { Upload, Camera } from '@lucide/svelte';
 	import type { CanvasItem } from '$lib/types';
 
+	import { Button } from '$lib/components/ui/button';
+
 	export let canvasStore: any;
 	export let showModal: boolean;
 
@@ -97,8 +99,11 @@
 				{/if}
 
 				<div>
-					<label class="mb-1 block text-sm font-medium text-gray-700"> Caption (optional) </label>
+					<label for="caption-input" class="mb-1 block text-sm font-medium text-gray-700">
+						Caption (optional)
+					</label>
 					<input
+						id="caption-input"
 						bind:value={caption}
 						type="text"
 						placeholder="Add a caption..."
