@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
-	import type { CanvasState } from '$lib/types';
-	import toast from 'svelte-french-toast';
 	import LZString from 'lz-string';
+	import toast from 'svelte-french-toast';
+	import { createEventDispatcher, onMount } from 'svelte';
+
+	import Icons from '$lib/components/ui/icons.svelte';
+	import type { CanvasState } from '$lib/types';
 
 	export let canvasStore: any;
 	export let showExportModal: boolean;
@@ -169,16 +171,15 @@
 		}
 	}
 
-	// Add click outside listener
-	onMount(() => {
-		$: if (isOpen) {
-			setTimeout(() => {
-				document.addEventListener('click', handleClickOutside);
-			}, 0);
-		} else {
-			document.removeEventListener('click', handleClickOutside);
-		}
+	$: if (isOpen) {
+		setTimeout(() => {
+			document.addEventListener('click', handleClickOutside);
+		}, 0);
+	} else {
+		document.removeEventListener('click', handleClickOutside);
+	}
 
+	onMount(() => {
 		return () => {
 			document.removeEventListener('click', handleClickOutside);
 		};
@@ -186,38 +187,23 @@
 </script>
 
 <div class="hamburger-menu fixed top-4 right-4 z-50">
-	<!-- Hamburger Button -->
 	<button
 		on:click={toggleMenu}
-		class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg bg-white shadow-lg transition-colors hover:bg-gray-50"
+		class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg bg-white shadow-lg transition-colors"
 		title="Menu"
 	>
 		<img src="/assets/menu.svg" alt="Menu" class="h-5 w-5" />
+		<!-- <Icons name="bars" className="h-5 w-5" /> -->
 	</button>
 
-	<!-- Dropdown Menu -->
 	{#if isOpen}
 		<div class="absolute top-12 right-0 w-64 rounded-lg border border-gray-200 bg-white shadow-xl">
-			<!-- File and Canvas Actions -->
 			<div class="p-2">
 				<button
 					on:click={handleLoadFile}
 					class="flex w-full items-center gap-3 rounded px-3 py-2 text-left transition-colors hover:bg-gray-100"
 				>
-					<svg class="h-4 w-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"
-						></path>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"
-						></path>
-					</svg>
+					<Icons name="folder-open" className="h-4 w-4" />
 					<span>Open</span>
 					<span class="ml-auto text-xs text-gray-400">Ctrl+O</span>
 				</button>
@@ -226,7 +212,7 @@
 					on:click={handleExport}
 					class="flex w-full items-center gap-3 rounded px-3 py-2 text-left transition-colors hover:bg-gray-100"
 				>
-					<svg class="h-4 w-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path
 							stroke-linecap="round"
 							stroke-linejoin="round"
@@ -234,6 +220,7 @@
 							d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
 						></path>
 					</svg>
+					<!-- <Icons name="download" className="h4 w-4" /> -->
 					<span>Export layout...</span>
 					<span class="ml-auto text-xs text-gray-400">Ctrl+Shift+E</span>
 				</button>
@@ -242,14 +229,8 @@
 					on:click={generateShareableLink}
 					class="flex w-full items-center gap-3 rounded px-3 py-2 text-left transition-colors hover:bg-gray-100"
 				>
-					<svg class="h-4 w-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-						></path>
-					</svg>
+					<Icons name="link" className="h-4 w-4" />
+
 					<span>Shareable link</span>
 					<span class="ml-auto text-xs text-gray-400">Ctrl+Shift+S</span>
 				</button>
@@ -258,14 +239,7 @@
 					on:click={() => canvasStore.reset()}
 					class="flex w-full items-center gap-3 rounded px-3 py-2 text-left transition-colors hover:bg-gray-100"
 				>
-					<svg class="h-4 w-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-						></path>
-					</svg>
+					<Icons name="trash" className="h-4 w-4" />
 					<span>Reset canvas</span>
 				</button>
 			</div>
@@ -273,7 +247,6 @@
 			<!-- Divider -->
 			<div class="border-t border-gray-200"></div>
 
-			<!-- Canvas Background -->
 			<div class="p-2">
 				<div class="px-3 py-2 text-sm font-medium text-gray-700">Canvas background</div>
 				<div class="grid grid-cols-6 gap-1 px-3 pb-2">
@@ -282,6 +255,7 @@
 							on:click={() => changeBackground(color.value)}
 							class="h-8 w-8 rounded border-2 border-gray-300 transition-colors hover:border-gray-400 {color.class}"
 							title={color.name}
+							aria-label={`Set background color to ${color.name}`}
 						></button>
 					{/each}
 				</div>
@@ -290,21 +264,13 @@
 			<!-- Divider -->
 			<div class="border-t border-gray-200"></div>
 
-			<!-- Help -->
 			<div class="p-2">
 				<button
-					on:click={() =>
-						window.open('https://github.com/ibrahimraimi/digital-playground', '_blank')}
+					on:click={() => window.open('https://github.com/ibrahimraimi/playground', '_blank')}
 					class="flex w-full items-center gap-3 rounded px-3 py-2 text-left transition-colors hover:bg-gray-100"
 				>
-					<svg class="h-4 w-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-						></path>
-					</svg>
+					<Icons name="question" className="h-4 w-4" />
+
 					<span>Help</span>
 					<span class="ml-auto text-xs text-gray-400">?</span>
 				</button>
