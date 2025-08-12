@@ -49,54 +49,39 @@
 	</div> -->
 
 	<!-- Main Toolbar -->
-	<div class="flex items-center gap-6 rounded-xl bg-white px-6 py-4 shadow-lg">
+	<div class="flex items-center gap-4 rounded-xl bg-white px-4 py-2 shadow-lg">
 		<!-- Add Photo -->
-		<button
-			on:click={handleAddPhoto}
-			class="flex cursor-pointer flex-col items-center gap-1 transition-transform hover:scale-125"
-		>
-			<div class="flex h-12 w-12 items-center justify-center">
-				<img src="/assets/camera.svg" alt="Camera" class="h-30 w-30" />
+		<button on:click={handleAddPhoto} class="flex cursor-pointer flex-col items-center">
+			<div class="flex items-center justify-center">
+				<img src="/assets/camera.svg" alt="Camera" class="h-10 w-10" />
 			</div>
 		</button>
 
 		<!-- Add Sticky Note -->
-		<button
-			on:click={handleAddStickyNote}
-			class="flex cursor-pointer flex-col items-center gap-1 transition-transform hover:scale-125"
-		>
-			<div class="relative flex h-12 w-12 items-center justify-center">
-				<img src="/assets/notes.svg" alt="Note" class="h-30 w-30" />
+		<button on:click={handleAddStickyNote} class="flex cursor-pointer flex-col items-center">
+			<div class="relative flex items-center justify-center">
+				<img src="/assets/notes.svg" alt="Note" class="h-10 w-10" />
 			</div>
 		</button>
 
 		<!-- Record Voice -->
-		<button
-			on:click={handleAddVoiceMessage}
-			class="flex cursor-pointer flex-col items-center gap-1 transition-transform hover:scale-125"
-		>
-			<div class="flex h-12 w-12 items-center justify-center">
-				<img src="/assets/microphone.svg" alt="Mic" class="h-30 w-30" />
+		<button on:click={handleAddVoiceMessage} class="flex cursor-pointer flex-col items-center">
+			<div class="flex items-center justify-center">
+				<img src="/assets/microphone.svg" alt="Mic" class="h-10 w-10" />
 			</div>
 		</button>
 
 		<!-- Add Spotify -->
-		<button
-			on:click={handleAddSpotify}
-			class="flex cursor-pointer flex-col items-center gap-1 transition-transform hover:scale-125"
-		>
-			<div class="flex h-12 w-12 items-center justify-center">
-				<img src="/assets/disc.svg" alt="Music" class="h-30 w-30" />
+		<button on:click={handleAddSpotify} class="flex cursor-pointer flex-col items-center">
+			<div class="flex items-center justify-center">
+				<img src="/assets/disc.svg" alt="Music" class="h-10 w-10" />
 			</div>
 		</button>
 
 		<!-- Draw Doodle -->
-		<button
-			on:click={handleDrawDoodle}
-			class="flex cursor-pointer flex-col items-center gap-1 transition-transform hover:scale-125"
-		>
-			<div class="flex h-12 w-12 items-center justify-center">
-				<img src="/assets/pencil.svg" alt="Doodle" class="h-30 w-30" />
+		<button on:click={handleDrawDoodle} class="flex cursor-pointer flex-col items-center">
+			<div class="flex items-center justify-center">
+				<img src="/assets/pencil.svg" alt="Doodle" class="h-10 w-10" />
 			</div>
 		</button>
 	</div>
