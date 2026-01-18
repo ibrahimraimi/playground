@@ -1,5 +1,9 @@
 # 🎨 Digital Playground
 
+> This codebase has been archived. A new version is currently under development and can be found here:
+> 👉 [https://github.com/ibrahimraimi/digitalplayground](https://github.com/ibrahimraimi)
+
+
 A creative web application for building interactive digital letters and layouts with multimedia elements.
 
 [![Svelte](https://img.shields.io/badge/Svelte-5.0.0-ff3e00?logo=svelte)](https://svelte.dev/)
